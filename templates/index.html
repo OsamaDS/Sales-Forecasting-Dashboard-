@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Sample chart </title>
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="static/chart/chart.min.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <div class="nav">
+            <h3 class="head">Dashboard</h3>
+            <ul class="list">
+                <li class="listItem"><a href="/">Home</a></li>
+                <li class="listItem"><a href="/charts">Revenue Analysis</a></li>
+                <li class="listItem"><a href="/model">Model Performance</a></li>
+                <li class="listItem">Contact</li>
+            </ul>
+        </div>
+        <div class="charts">
+            <div class="items1">
+                <!-- <canvas id="lineChart"></canvas> -->
+
+                <div class="item1-headings">
+                    <h4>Total Revenue</h4>
+                    <h2>{{total_revenue}}</h2>
+                </div>
+            </div>
+            <div class="item1-2">
+                <div>
+                    <div>
+                        <h4>Total Customers</h4>
+                    </div>
+                    <div>
+                        <h4><strong>{{total_customers}}</strong></h4>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h4>Total Sales</h4>
+                    </div>
+                    <div>
+                        <h4><strong>{{total_sales}}</strong></h4>
+                    </div>
+                </div>
+                <!-- <div>
+                    <h4>Total Sales</h4>
+                    <h2>none</h2>
+                </div> -->
+            </div>
+            <!-- <div class="item1-3">
+
+            </div> -->
+            <div class="items2">
+                <!-- <p>second chart</p> -->
+                <br>
+                <div class="header">
+                    <h4 class="title">Revenue for each Segment (2015-2019)</h4>
+                    <p class="category">Segment Performance</p>
+                </div>
+                <br>
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="items3">
+                <br>
+                <div class="header">
+                    <h4 class="title">Revenue generated over the Years (2015-2019)</h4>
+                    <p class="category">Yearly Performance</p>
+                </div>
+                <br>
+                <canvas id="thrdChart"></canvas>
+            </div>
+            <div class="items4">
+                <br>
+                <div>
+                    <h4>
+                        Top Customers from (2015-2019)
+                    </h4>
+                </div>
+                <br>
+                <table class="table table-striped">
+                    <tr>
+                        {% for name in headings %}
+                        <th>{{ name }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for row in values %}
+                    <tr>
+                        {% for cell in row %}
+                        <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </div>
+            <div class="items5">
+                <br>
+                <div class="header">
+
+                    <h4 class="title">Weekly Revenue generated (2015-2019)</h4>
+                    <p class="category">Weekly Performance</p>
+
+                </div>
+                <br>
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        @All rights reserved by Usama Abid.
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.com/libraries/Chart.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <script>
+        // var ctx = document.getElementById("lineChart").getContext("2d");
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        var lineChart = new Chart("lineChart", {
+            type: "bar",
+            data: {
+                labels: [
+                    {% for item in data['Bar']['labels'] %}
+                        "{{ item }}",
+                        {% endfor %}
+	                ],
+        datasets: [
+            {
+                label: "Weekly Revenue generation trend",
+                fill: true,
+                backgroundColor: [
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor()
+                ],
+                lineTension: 0.5,
+                data: [
+                    {% for item in data['Bar']['values'] %}
+                            "{{ item }}",
+            {% endfor %}
+        ]
+                    }
+                ]
+            },
+        options: {
+            responsive: true
+        }
+        });
+    </script>
+
+    <script>
+        // 2nd chart
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        var lineChart = new Chart("barChart", {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    {% for item in data['Pie']['labels'] %}
+                            "{{ item }}",
+                            {% endfor %}
+    	                ],
+        datasets: [
+            {
+                label: "Data points",
+                fill: true,
+
+                backgroundColor: [
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                ],
+
+                data: [
+                    {% for item in data['Pie']['values'] %}
+                                    "{{ item }}",
+            {% endfor %}
+        ]
+                        }
+                    ]
+                },
+        options: {
+            responsive: true,
+                plugins: {
+                datalabels: {
+                    color: "#fff",
+                        anchor: "end",
+                            alignment: "start",
+                                offset: -10,
+                                    borderWidth: 2,
+                                        borderColor: "#fff",
+                                            borderRadius: 25,
+                                                backgroundColor: (context) => {
+                                                    return context.dataset.backgroundColor;
+                                                },
+                                                    font: {
+                        weight: 'bold',
+                            size: 10,
+            },
+                    formatter: (value) => {
+                        return value + ' %';
+                    }
+                }
+            }
+
+        },
+        plugins: [ChartDataLabels]
+        
+            });
+    </script>
+
+    <script>
+        // 3rd chart
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        var lineChart = new Chart("thrdChart", {
+            type: "line",
+            data: {
+                labels: [
+                    {% for item in data['Line']['labels'] %}
+                                "{{ item }}",
+                                {% endfor %}
+        	                ],
+        datasets: [
+            {
+                label: "Yearly Revenue generation trend",
+                fill: true,
+                backgroundColor: getRandomColor(),
+                borderColor: getRandomColor(),
+
+                data: [
+                    {% for item in data['Line']['values'] %}
+                                        "{{ item }}",
+            {% endfor %}
+        ]
+                            }
+                        ]
+                    },
+        options: {
+            elements: {
+                line: {
+                    tension: 0
+                }
+            }
+            // responsive: true
+        } 
+                });
+    </script>
+
+
+</body>
+
+</html>
