@@ -9,7 +9,9 @@ Time series model file is not in the repo because file was large to upload, when
 model will start training and model file will be saved in your project repo so you don't need to worry about model file.
 
 ## Project Description
-This project is designed in flask which is web frame work of python. I have build Machine Learning Time Series model and also dashboard to explore the data of sales and to show the results of model.
+This project is designed in flask which is web frame work of python. I have build end to end Machine Learning Time Series model and also dashboard to explore the data of sales and to show the results of model. I have also deployed this app to Heroku. The link for this app is given below
+
+### https://sales-forecasting-dashboard.herokuapp.com/
 
 ### THANKYOU!!
 
